@@ -3,7 +3,6 @@
     <h1>拉勾教育</h1>
     <!-- 根路由出口 -->
     <router-view/>
-    <el-button>dsa</el-button>
   </div>
 </template>
 
