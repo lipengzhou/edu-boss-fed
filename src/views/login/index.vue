@@ -21,7 +21,12 @@
         <el-input type="password" v-model="form.password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="login-btn" type="primary" @click="onSubmit">登录</el-button>
+        <el-button
+          class="login-btn"
+          type="primary"
+          :loading="isLoginLoading"
+          @click="onSubmit"
+        >登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -50,7 +55,8 @@ export default Vue.extend({
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
         ]
-      }
+      },
+      isLoginLoading: false
     }
   },
 
@@ -59,6 +65,9 @@ export default Vue.extend({
       try {
         // 1. 表单验证
         await (this.$refs.form as Form).validate()
+
+        // 登录按钮 loading
+        this.isLoginLoading = true
 
         // 2. 验证通过 -> 提交表单
         const { data } = await request({
@@ -81,6 +90,9 @@ export default Vue.extend({
       } catch (err) {
         console.log('登录失败', err)
       }
+
+      // 结束登录按钮的 loading
+      this.isLoginLoading = false
     }
   }
 })
