@@ -47,10 +47,16 @@ export default Vue.extend({
         data: qs.stringify(this.form) // axios 默认发送的是 application/json 格式的数据
       })
 
-      console.log(data)
       // 3. 处理请求结果
-      //    成功：跳转到首页
       //    失败：给出提示
+      if (data.state !== 1) {
+        return this.$message.error(data.message)
+      }
+      //    成功：跳转到首页
+      this.$router.push({
+        name: 'home'
+      })
+      this.$message.success('登录成功')
     }
   }
 })
