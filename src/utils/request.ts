@@ -1,12 +1,23 @@
 import axios from 'axios'
 import store from '@/store'
 import { Message } from 'element-ui'
+import router from '@/router'
+import qs from 'qs'
 
 const request = axios.create({
   // 配置选项
   // baseURL,
   // timeout
 })
+
+function redirectLogin () {
+  router.push({
+    name: 'login',
+    query: {
+      redirect: router.currentRoute.fullPath
+    }
+  })
+}
 
 // 请求拦截器
 request.interceptors.request.use(function (config) {
@@ -28,7 +39,7 @@ request.interceptors.response.use(function (response) { // 状态码为 2xx 都�
   // console.log('请求响应成功了 => ', response)
   // 如果是自定义错误状态码，错误处理就写到这里
   return response
-}, function (error) { // 超出 2xx 状态码都都执行这里
+}, async function (error) { // 超出 2xx 状态码都都执行这里
   // console.log('请求响应失败了 => ', error)
   // 如果是使用的 HTTP 状态码，错误处理就写到这里
   // console.dir(error)
@@ -38,6 +49,35 @@ request.interceptors.response.use(function (response) { // 状态码为 2xx 都�
       Message.error('请求参数错误')
     } else if (status === 401) {
       // token 无效（没有提供 token、token 是无效的、token 过期了）
+      // 如果有 refresh_token 则尝试使用 refresh_token 获取新的 access_token
+      if (!store.state.user) {
+        redirectLogin()
+        return Promise.reject(error)
+      }
+
+      // 尝试刷新获取新的 token
+      try {
+        const { data } = await axios.create()({
+          method: 'POST',
+          url: '/front/user/refresh_token',
+          data: qs.stringify({
+            refreshtoken: store.state.user.refresh_token
+          })
+        })
+        //   成功了 -> 把本次失败的请求重新发出去
+        // 把刷新拿到的新的 access_token 更新到容器和本地存储中
+        store.commit('setUser', data.content)
+        // 把本次失败的请求重新发出去
+        // console.log(error.config) // 失败请求的配置信息
+        return request(error.config)
+      } catch (err) {
+        // 把当前登录用户状态清除
+        store.commit('setUser', null)
+        //   失败了 -> 跳转登录页重新登录获取新的 token
+        redirectLogin()
+        return Promise.reject(error)
+      }
+      // 如果没有，则直接跳转登录页
     } else if (status === 403) {
       Message.error('没有权限，请联系管理员')
     } else if (status === 404) {
