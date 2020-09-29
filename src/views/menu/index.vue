@@ -38,7 +38,7 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              @click="handleEdit(scope.row)">编辑</el-button>
             <el-button
               size="mini"
               type="danger"
@@ -74,8 +74,13 @@ export default Vue.extend({
       }
     },
 
-    handleEdit () {
-      console.log('handleEdit')
+    handleEdit (item: any) {
+      this.$router.push({
+        name: 'menu-edit',
+        params: {
+          id: item.id
+        }
+      })
     },
 
     handleDelete (item: any) {
