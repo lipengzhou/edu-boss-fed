@@ -12,7 +12,7 @@ export const createOrUpdateMenu = (data: any) => {
   })
 }
 
-export const getEditMenuInfo = (id = -1) => {
+export const getEditMenuInfo = (id: string | number = -1) => {
   return request({
     method: 'GET',
     url: '/boss/menu/getEditMenuInfo',
