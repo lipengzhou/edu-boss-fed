@@ -43,6 +43,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { createOrUpdateMenu } from '@/services/menu'
 
 export default Vue.extend({
   name: 'MenuCreate',
@@ -61,8 +62,14 @@ export default Vue.extend({
   },
 
   methods: {
-    onSubmit () {
-      console.log('submit!')
+    async onSubmit () {
+      // 1. 表单验证
+      // 2. 验证通过，提交表单
+      const { data } = await createOrUpdateMenu(this.form)
+      if (data.code === '000000') {
+        this.$message.success('提交成功')
+        this.$router.back()
+      }
     }
   }
 })
