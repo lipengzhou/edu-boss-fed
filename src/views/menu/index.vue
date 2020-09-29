@@ -42,7 +42,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -52,29 +52,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getAllMenus } from '@/services/menu'
+import { getAllMenus, deleteMenu } from '@/services/menu'
 
 export default Vue.extend({
   name: 'MenuIndex',
   data () {
     return {
-      menus: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      menus: [] // 菜单列表
     }
   },
 
@@ -94,8 +78,20 @@ export default Vue.extend({
       console.log('handleEdit')
     },
 
-    handleDelete () {
-      console.log('handleDelete')
+    handleDelete (item: any) {
+      this.$confirm('确认删除吗？', '删除提示', {})
+        .then(async () => { // 确认执行这里
+          // 请求删除操作
+          const { data } = await deleteMenu(item.id)
+          if (data.code === '000000') {
+            this.$message.success('删除成功')
+            this.loadAllMenus() // 更新数据列表
+          }
+        })
+        .catch(err => { // 取消执行这里
+          console.log(err)
+          this.$message.info('已取消删除')
+        })
     }
   }
 })
