@@ -24,14 +24,23 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询搜索</el-button>
-            <el-button @click="onReset">重置</el-button>
+            <el-button
+              type="primary"
+              @click="onSubmit"
+              :disabled="isLoading"
+            >查询搜索</el-button>
+            <el-button
+              @click="onReset"
+              :disabled="isLoading"
+            >重置</el-button>
           </el-form-item>
         </el-form>
       </div>
       <el-table
         :data="resources"
-        style="width: 100%; margin-bottom: 20px">
+        style="width: 100%; margin-bottom: 20px"
+        v-loading="isLoading"
+      >
         <el-table-column
           type="index"
           label="编号"
@@ -80,6 +89,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
+        :disabled="isLoading"
         :current-page.sync="form.current"
         :page-sizes="[5, 10, 20]"
         :page-size="form.size"
@@ -109,7 +119,8 @@ export default Vue.extend({
         categoryId: null // 资源分类
       },
       totalCount: 0,
-      resourceCategories: [] // 资源分类列表
+      resourceCategories: [], // 资源分类列表
+      isLoading: true // 加载状态
     }
   },
 
@@ -125,9 +136,11 @@ export default Vue.extend({
     },
 
     async loadResources () {
+      this.isLoading = true // 展示加载中状态
       const { data } = await getResourcePages(this.form)
       this.resources = data.data.records
       this.totalCount = data.data.total
+      this.isLoading = false // 关闭加载中状态
     },
 
     onSubmit () {
