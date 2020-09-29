@@ -23,7 +23,7 @@
       </div>
       <el-table
         :data="resources"
-        style="width: 100%">
+        style="width: 100%; margin-bottom: 20px">
         <el-table-column
           type="index"
           label="编号"
@@ -63,6 +63,21 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <!--
+        total 总记录数
+        page-size 每页大小
+        分页组件会自动根据 total 和 page-size 计算出一共分多少页
+       -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="form.current"
+        :page-sizes="[5, 10, 20]"
+        :page-size="form.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalCount">
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -84,8 +99,15 @@ export default Vue.extend({
         delivery: false,
         type: [],
         resource: '',
-        desc: ''
-      }
+        desc: '',
+        current: 1, // 默认查询第1页数据
+        size: 5 // 每页大小
+      },
+      totalCount: 0,
+      currentPage1: 5,
+      currentPage2: 5,
+      currentPage3: 5,
+      currentPage4: 4
     }
   },
 
@@ -97,8 +119,11 @@ export default Vue.extend({
     async loadResources () {
       const { data } = await getResourcePages({
         // 查询条件
+        current: this.form.current, // 分页页码
+        size: this.form.size // 每页大小
       })
       this.resources = data.data.records
+      this.totalCount = data.data.total
     },
 
     onSubmit () {
@@ -111,6 +136,18 @@ export default Vue.extend({
 
     handleDelete (item: any) {
       console.log('handleDelete', item)
+    },
+
+    handleSizeChange (val: number) {
+      this.form.size = val
+      this.form.current = 1 // 每页大小改变重新查询第1页数据
+      this.loadResources()
+    },
+
+    handleCurrentChange (val: number) {
+      // 请求获取对应页码的数据
+      this.form.current = val // 修改要查询的页码
+      this.loadResources()
     }
   }
 })
