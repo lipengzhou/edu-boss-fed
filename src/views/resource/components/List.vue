@@ -7,12 +7,20 @@
             <el-input v-model="form.name"></el-input>
           </el-form-item>
           <el-form-item label="资源路径">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="form.url"></el-input>
           </el-form-item>
           <el-form-item label="资源分类">
-            <el-select v-model="form.region" placeholder="请选择活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+            <el-select
+              v-model="form.categoryId"
+              placeholder="请选择资源分类"
+              clearable
+            >
+              <el-option
+                :label="item.name"
+                :value="item.id"
+                v-for="item in resourceCategories"
+                :key="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -85,6 +93,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { getResourcePages } from '@/services/resource'
+import { getResourceCategories } from '@/services/resource-category'
 
 export default Vue.extend({
   name: 'ResourceList',
@@ -93,41 +102,36 @@ export default Vue.extend({
       resources: [], // 资源列表
       form: {
         name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
+        url: '',
         current: 1, // 默认查询第1页数据
-        size: 5 // 每页大小
+        size: 5, // 每页大小
+        categoryId: null // 资源分类
       },
       totalCount: 0,
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4
+      resourceCategories: [] // 资源分类列表
     }
   },
 
   created () {
     this.loadResources()
+    this.loadResourceCategories()
   },
 
   methods: {
+    async loadResourceCategories () {
+      const { data } = await getResourceCategories()
+      this.resourceCategories = data.data
+    },
+
     async loadResources () {
-      const { data } = await getResourcePages({
-        // 查询条件
-        current: this.form.current, // 分页页码
-        size: this.form.size // 每页大小
-      })
+      const { data } = await getResourcePages(this.form)
       this.resources = data.data.records
       this.totalCount = data.data.total
     },
 
     onSubmit () {
-      console.log('submit!')
+      this.form.current = 1 // 筛选查询从第 1 页开始
+      this.loadResources()
     },
 
     handleEdit (item: any) {
