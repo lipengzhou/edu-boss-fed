@@ -22,7 +22,7 @@
         </el-form>
       </div>
       <el-table
-        :data="tableData"
+        :data="resources"
         style="width: 100%">
         <el-table-column
           type="index"
@@ -35,18 +35,18 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="url"
           width="180"
           label="资源路径">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="description"
           width="180"
           label="描述">
         </el-table-column>
         <el-table-column
           width="180"
-          prop="address"
+          prop="createdTime"
           label="添加时间">
         </el-table-column>
         <el-table-column
@@ -69,28 +69,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { getResourcePages } from '@/services/resource'
 
 export default Vue.extend({
   name: 'ResourceList',
   data () {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }],
+      resources: [], // 资源列表
       form: {
         name: '',
         region: '',
@@ -104,7 +89,18 @@ export default Vue.extend({
     }
   },
 
+  created () {
+    this.loadResources()
+  },
+
   methods: {
+    async loadResources () {
+      const { data } = await getResourcePages({
+        // 查询条件
+      })
+      this.resources = data.data.records
+    },
+
     onSubmit () {
       console.log('submit!')
     },

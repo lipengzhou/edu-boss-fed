@@ -1,5 +1,5 @@
 /**
- * 用户相关请求模块
+ * 菜单相关请求模块
  */
 
 import request from '@/utils/request'
