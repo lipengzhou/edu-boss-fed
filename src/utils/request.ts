@@ -19,6 +19,17 @@ function redirectLogin () {
   })
 }
 
+function refreshToken () {
+  return axios.create()({
+    method: 'POST',
+    url: '/front/user/refresh_token',
+    data: qs.stringify({
+      // refresh_token 只能使用1次
+      refreshtoken: store.state.user.refresh_token
+    })
+  })
+}
+
 // 请求拦截器
 request.interceptors.request.use(function (config) {
   // 我们就在这里通过改写 config 配置信息来实现业务功能的统一处理
@@ -35,6 +46,8 @@ request.interceptors.request.use(function (config) {
 })
 
 // 响应拦截器
+let isRfreshing = false // 控制刷新 token 的状态
+let requests: any[] = [] // 存储刷新 token 期间过来的 401 请求
 request.interceptors.response.use(function (response) { // 状态码为 2xx 都会进入这里
   // console.log('请求响应成功了 => ', response)
   // 如果是自定义错误状态码，错误处理就写到这里
@@ -55,29 +68,38 @@ request.interceptors.response.use(function (response) { // 状态码为 2xx 都�
         return Promise.reject(error)
       }
 
-      // 尝试刷新获取新的 token
-      try {
-        const { data } = await axios.create()({
-          method: 'POST',
-          url: '/front/user/refresh_token',
-          data: qs.stringify({
-            refreshtoken: store.state.user.refresh_token
-          })
+      // 刷新 token
+      if (!isRfreshing) {
+        isRfreshing = true // 开启刷新状态
+        // 尝试刷新获取新的 token
+        return refreshToken().then(res => {
+          if (!res.data.success) {
+            throw new Error('刷新 Token 失败')
+          }
+
+          // 刷新 token 成功了
+          store.commit('setUser', res.data.content)
+          // 把 requests 队列中的请求重新发出去
+          requests.forEach(cb => cb())
+          // 重置 requests 数组
+          requests = []
+          return request(error.config)
+        }).catch(err => {
+          console.log(err)
+          store.commit('setUser', null)
+          redirectLogin()
+          return Promise.reject(error)
+        }).finally(() => {
+          isRfreshing = false // 重置刷新状态
         })
-        //   成功了 -> 把本次失败的请求重新发出去
-        // 把刷新拿到的新的 access_token 更新到容器和本地存储中
-        store.commit('setUser', data.content)
-        // 把本次失败的请求重新发出去
-        // console.log(error.config) // 失败请求的配置信息
-        return request(error.config)
-      } catch (err) {
-        // 把当前登录用户状态清除
-        store.commit('setUser', null)
-        //   失败了 -> 跳转登录页重新登录获取新的 token
-        redirectLogin()
-        return Promise.reject(error)
       }
-      // 如果没有，则直接跳转登录页
+
+      // 刷新状态下，把请求挂起放到 requests 数组中
+      return new Promise(resolve => {
+        requests.push(() => {
+          resolve(request(error.config))
+        })
+      })
     } else if (status === 403) {
       Message.error('没有权限，请联系管理员')
     } else if (status === 404) {
