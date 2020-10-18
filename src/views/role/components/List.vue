@@ -67,6 +67,14 @@
         </el-table-column>
       </el-table>
     </el-card>
+
+    <el-dialog
+      title="添加角色"
+      :visible.sync="dialogVisible"
+      width="50%"
+    >
+      <create-or-edit />
+    </el-dialog>
   </div>
 </template>
 
@@ -74,9 +82,13 @@
 import Vue from 'vue'
 import { getRoles, deleteRole } from '@/services/role'
 import { Form } from 'element-ui'
+import CreateOrEdit from './CreateOrEdit.vue'
 
 export default Vue.extend({
   name: 'RoleList',
+  components: {
+    CreateOrEdit
+  },
   data () {
     return {
       roles: [], // 角色列表
@@ -85,7 +97,8 @@ export default Vue.extend({
         size: 50,
         name: ''
       }, // 查询条件
-      loading: false
+      loading: false,
+      dialogVisible: true // 控制添加/编辑角色的对话框显示和隐藏
     }
   },
 
