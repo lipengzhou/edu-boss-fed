@@ -42,3 +42,11 @@ export const getMenuNodeList = () => {
     url: '/boss/menu/getMenuNodeList'
   })
 }
+
+export const allocateRoleMenus = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/menu/allocateRoleMenus',
+    data
+  })
+}
