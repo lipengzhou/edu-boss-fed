@@ -11,3 +11,10 @@ export const getRoles = (data: any) => {
     data
   })
 }
+
+export const deleteRole = (id: string | number) => {
+  return request({
+    method: 'DELETE',
+    url: `/boss/role/${id}`
+  })
+}

@@ -9,7 +9,7 @@ import Vue from 'vue'
 import RoleList from './components/List.vue'
 
 export default Vue.extend({
-  name: 'LoginIndex',
+  name: 'RoleIndex',
   components: {
     RoleList
   }

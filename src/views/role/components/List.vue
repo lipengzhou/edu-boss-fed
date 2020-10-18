@@ -20,42 +20,32 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-button>添加角色</el-button>
+      <el-button @click="dialogFormVisible = true">添加角色</el-button>
       <el-table
         :data="roles"
-        v-loading="loading"
         style="width: 100%"
+        v-loading="loading"
       >
         <el-table-column
           prop="id"
           label="编号"
-          align="center"
-          width="50">
-        </el-table-column>
+        />
         <el-table-column
           prop="name"
           label="角色名称"
-          align="center"
-          width="150"
-        >
-        </el-table-column>
+        />
         <el-table-column
           prop="description"
           label="描述"
-          align="center"
-          width="150"
-        >
-        </el-table-column>
+        />
         <el-table-column
           prop="createdTime"
           label="添加时间"
-          width="150"
-          align="center">
-        </el-table-column>
+        />
         <el-table-column
           label="操作"
           align="center"
-          width="150"
+          width="150px"
         >
           <template slot-scope="scope">
             <div>
@@ -82,7 +72,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getRoles } from '@/services/role'
+import { getRoles, deleteRole } from '@/services/role'
 import { Form } from 'element-ui'
 
 export default Vue.extend({
@@ -119,8 +109,19 @@ export default Vue.extend({
       console.log(role)
     },
 
-    handleDelete (role: any) {
-      console.log(role)
+    async handleDelete (role: any) {
+      try {
+        await this.$confirm(`确认删除角色：${role.name}？`, '删除提示')
+        await deleteRole(role.id)
+        this.$message.success('删除成功')
+        this.loadRoles()
+      } catch (err) {
+        if (err && err.response) {
+          this.$message.error('删除失败，请重试')
+        } else {
+          this.$message.info('取消删除')
+        }
+      }
     },
 
     onReset () {
