@@ -18,3 +18,11 @@ export const deleteRole = (id: string | number) => {
     url: `/boss/role/${id}`
   })
 }
+
+export const createOrUpdate = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/role/saveOrUpdate',
+    data
+  })
+}
