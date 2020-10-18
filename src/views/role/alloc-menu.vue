@@ -14,7 +14,7 @@
         default-expand-all
       ></el-tree>
       <div style="text-align: center">
-        <el-button>清空</el-button>
+        <el-button @click="resetChecked">清空</el-button>
         <el-button type="primary" @click="onSave">保存</el-button>
       </div>
     </el-card>
@@ -88,6 +88,10 @@ export default Vue.extend({
       })
       this.$message.success('操作成功')
       this.$router.back()
+    },
+
+    resetChecked () {
+      (this.$refs['menu-tree'] as Tree).setCheckedKeys([])
     }
   }
 })
