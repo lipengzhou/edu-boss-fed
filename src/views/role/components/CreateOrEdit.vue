@@ -20,10 +20,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { createOrUpdate } from '@/services/role'
+import { createOrUpdate, getRoleById } from '@/services/role'
 
 export default Vue.extend({
   name: 'CreateOrEditRole',
+  props: {
+    roleId: {
+      type: [String, Number]
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       role: {
@@ -34,9 +43,21 @@ export default Vue.extend({
     }
   },
 
+  created () {
+    // 如果是编辑操作，则根据角色 ID 加载展示角色信息
+    if (this.isEdit) {
+      this.loadRole()
+    }
+  },
+
   methods: {
+    async loadRole () {
+      const { data } = await getRoleById(this.roleId)
+      this.role = data.data
+    },
+
     async onSubmit () {
-      const { data } = await createOrUpdate(this.role)
+      await createOrUpdate(this.role)
       this.$message.success('操作成功')
       this.$emit('success')
     }

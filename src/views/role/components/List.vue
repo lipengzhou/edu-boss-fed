@@ -20,7 +20,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-button @click="dialogVisible = true">添加角色</el-button>
+      <el-button @click="handleAdd">添加角色</el-button>
       <el-table
         :data="roles"
         style="width: 100%"
@@ -69,11 +69,14 @@
     </el-card>
 
     <el-dialog
-      title="添加角色"
+      :title="isEdit ? '编辑角色' : '添加角色'"
       :visible.sync="dialogVisible"
       width="50%"
     >
       <create-or-edit
+        v-if="dialogVisible"
+        :role-id="roleId"
+        :is-edit="isEdit"
         @success="onSuccess"
         @cancel="dialogVisible = false"
       />
@@ -101,7 +104,9 @@ export default Vue.extend({
         name: ''
       }, // 查询条件
       loading: false,
-      dialogVisible: false // 控制添加/编辑角色的对话框显示和隐藏
+      dialogVisible: false, // 控制添加/编辑角色的对话框显示和隐藏
+      roleId: null, // 编辑角色的 ID
+      isEdit: false
     }
   },
 
@@ -122,7 +127,9 @@ export default Vue.extend({
     },
 
     handleEdit (role: any) {
-      console.log(role)
+      this.dialogVisible = true
+      this.roleId = role.id
+      this.isEdit = true
     },
 
     async handleDelete (role: any) {
@@ -148,6 +155,11 @@ export default Vue.extend({
     onSuccess () {
       this.dialogVisible = false // 关闭对话框
       this.loadRoles() // 重新加载数据列表
+    },
+
+    handleAdd () {
+      this.isEdit = false
+      this.dialogVisible = true
     }
   }
 })
