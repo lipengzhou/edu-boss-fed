@@ -2,7 +2,7 @@
   <div class="alloc-menu">
     <el-card>
       <div slot="header">
-        <span>分配权限</span>
+        <span>分配菜单</span>
       </div>
       <el-tree
         ref="menu-tree"

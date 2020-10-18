@@ -58,7 +58,15 @@
                   }
                 })"
               >分配菜单</el-button>
-              <el-button type="text">分配资源</el-button>
+              <el-button
+                type="text"
+                @click="$router.push({
+                  name: 'alloc-resource',
+                  params: {
+                    roleId: scope.row.id
+                  }
+                })"
+              >分配资源</el-button>
             </div>
             <div>
               <el-button
