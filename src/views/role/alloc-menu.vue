@@ -9,6 +9,7 @@
         :data="menus"
         node-key="id"
         :props="defaultProps"
+        :default-checked-keys="checkedKeys"
         show-checkbox
         default-expand-all
       ></el-tree>
@@ -22,8 +23,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getMenuNodeList, allocateRoleMenus } from '@/services/menu'
+import {
+  getMenuNodeList,
+  allocateRoleMenus,
+  getRoleMenus
+} from '@/services/menu'
 import { Tree } from 'element-ui'
+import { getRoleById } from '@/services/role'
 
 export default Vue.extend({
   name: 'AllocMenu',
@@ -39,15 +45,34 @@ export default Vue.extend({
       defaultProps: {
         children: 'subMenuList',
         label: 'name'
-      }
+      },
+      checkedKeys: []
     }
   },
 
-  created () {
-    this.loadMenus()
+  async created () {
+    await this.loadMenus()
+    this.loadRoleMenus()
   },
 
   methods: {
+    async loadRoleMenus () {
+      const { data } = await getRoleMenus(this.roleId)
+      this.getCheckedKeys(data.data)
+    },
+
+    getCheckedKeys (menus: any) {
+      menus.forEach((menu: any) => {
+        if (menu.selected) {
+          // this.checkedKeys.push(menu.id as never)
+          this.checkedKeys = [...this.checkedKeys, menu.id] as any
+        }
+        if (menu.subMenuList) {
+          this.getCheckedKeys(menu.subMenuList)
+        }
+      })
+    },
+
     async loadMenus () {
       const { data } = await getMenuNodeList()
       this.menus = data.data
