@@ -83,7 +83,7 @@
         <template>
           <el-button
             type="text"
-            @click="dialogVisible = true"
+            @click="handleSelectRole"
           >分配角色</el-button>
         </template>
       </el-table-column>
@@ -95,10 +95,10 @@
     >
       <el-select v-model="value1" multiple placeholder="请选择">
         <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
+          v-for="item in roles"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id">
         </el-option>
       </el-select>
       <span slot="footer" class="dialog-footer">
@@ -113,6 +113,8 @@
 import Vue from 'vue'
 import { getUserPages, forbidUser } from '@/services/user'
 import { Form } from 'element-ui'
+import { getAllRoles } from '@/services/role'
+import { getAllResources } from '@/services/resource'
 
 export default Vue.extend({
   name: 'UserList',
@@ -145,6 +147,7 @@ export default Vue.extend({
         value: '选项5',
         label: '北京烤鸭'
       }],
+      roles: [],
       value1: []
     }
   },
@@ -182,6 +185,14 @@ export default Vue.extend({
     handleReset () {
       (this.$refs['filter-form'] as Form).resetFields()
       this.loadUsers()
+    },
+
+    async handleSelectRole () {
+      // 加载角色列表
+      const { data } = await getAllRoles()
+      this.roles = data.data
+      // 展示对话框
+      this.dialogVisible = true
     }
   }
 })
