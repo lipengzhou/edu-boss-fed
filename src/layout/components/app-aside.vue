@@ -8,6 +8,7 @@
       text-color="#fff"
       active-text-color="#ffd04b"
       router
+      collapse
     >
       <el-submenu index="1">
         <template slot="title">
@@ -74,7 +75,7 @@ export default Vue.extend({
 .aside {
   height: 100%;
   .el-menu {
-    width: 200px;
+    width: auto;
     // min-height: 100vh;
     height: 100%;
   }

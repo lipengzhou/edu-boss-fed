@@ -65,10 +65,14 @@
         <el-table-column
           prop="status"
           label="上架状态">
-          <template>
+          <template slot-scope="scope">
             <el-switch
+              v-model="scope.row.status"
               active-color="#13ce66"
-              inactive-color="#ff4949">
+              inactive-color="#ff4949"
+              :active-value="1"
+              :inactive-value="0"
+            >
             </el-switch>
           </template>
         </el-table-column>
