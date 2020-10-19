@@ -11,3 +11,11 @@ export const getQueryCourses = (data: any) => {
     data
   })
 }
+
+export const changeState = (params: any) => {
+  return request({
+    method: 'GET',
+    url: '/boss/course/changeState',
+    params
+  })
+}

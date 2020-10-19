@@ -72,8 +72,9 @@
               inactive-color="#ff4949"
               :active-value="1"
               :inactive-value="0"
-            >
-            </el-switch>
+              :disabled="scope.row.isStatusLoading"
+              @change="onStateChange(scope.row)"
+            />
           </template>
         </el-table-column>
         <el-table-column
@@ -101,7 +102,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getQueryCourses } from '@/services/course'
+import { getQueryCourses, changeState } from '@/services/course'
 import { Form } from 'element-ui'
 
 export default Vue.extend({
@@ -128,6 +129,9 @@ export default Vue.extend({
     async loadCourses () {
       this.loading = true
       const { data } = await getQueryCourses(this.filterParams)
+      data.data.records.forEach((item: any) => {
+        item.isStatusLoading = false
+      })
       this.courses = data.data.records
       this.totalCount = data.data.total
       this.loading = false
@@ -147,6 +151,16 @@ export default Vue.extend({
       (this.$refs.form as Form).resetFields()
       this.filterParams.currentPage = 1
       this.loadCourses()
+    },
+
+    async onStateChange (course: any) {
+      course.isStatusLoading = true
+      const { data } = await changeState({
+        courseId: course.id,
+        status: course.status
+      })
+      this.$message.success(`${course.status === 0 ? '下架' : '上架'}成功`)
+      course.isStatusLoading = false
     }
   }
 })
