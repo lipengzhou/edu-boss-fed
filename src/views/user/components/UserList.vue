@@ -116,7 +116,11 @@
 import Vue from 'vue'
 import { getUserPages, forbidUser } from '@/services/user'
 import { Form } from 'element-ui'
-import { getAllRoles, allocateUserRoles } from '@/services/role'
+import {
+  getAllRoles,
+  allocateUserRoles,
+  getUserRoles
+} from '@/services/role'
 
 export default Vue.extend({
   name: 'UserList',
@@ -179,6 +183,10 @@ export default Vue.extend({
       // 加载角色列表
       const { data } = await getAllRoles()
       this.roles = data.data
+
+      const { data: { data: userRoles } } = await getUserRoles((this.currentUser as any).id)
+      this.roleIdList = userRoles.map((item: any) => item.id)
+
       // 展示对话框
       this.dialogVisible = true
     },
