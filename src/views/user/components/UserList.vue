@@ -80,10 +80,10 @@
       <el-table-column
         prop="address"
         label="操作">
-        <template>
+        <template slot-scope="scope">
           <el-button
             type="text"
-            @click="handleSelectRole"
+            @click="handleSelectRole(scope.row)"
           >分配角色</el-button>
         </template>
       </el-table-column>
@@ -93,7 +93,7 @@
       :visible.sync="dialogVisible"
       width="50%"
     >
-      <el-select v-model="value1" multiple placeholder="请选择">
+      <el-select v-model="roleIdList" multiple placeholder="请选择">
         <el-option
           v-for="item in roles"
           :key="item.id"
@@ -103,7 +103,10 @@
       </el-select>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="handleAllocRole"
+        >确 定</el-button>
       </span>
     </el-dialog>
   </el-card>
@@ -113,8 +116,7 @@
 import Vue from 'vue'
 import { getUserPages, forbidUser } from '@/services/user'
 import { Form } from 'element-ui'
-import { getAllRoles } from '@/services/role'
-import { getAllResources } from '@/services/resource'
+import { getAllRoles, allocateUserRoles } from '@/services/role'
 
 export default Vue.extend({
   name: 'UserList',
@@ -131,24 +133,9 @@ export default Vue.extend({
       },
       loading: true,
       dialogVisible: false,
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
       roles: [],
-      value1: []
+      roleIdList: [],
+      currentUser: null // 分配角色的当前用户
     }
   },
 
@@ -187,12 +174,22 @@ export default Vue.extend({
       this.loadUsers()
     },
 
-    async handleSelectRole () {
+    async handleSelectRole (role: any) {
+      this.currentUser = role
       // 加载角色列表
       const { data } = await getAllRoles()
       this.roles = data.data
       // 展示对话框
       this.dialogVisible = true
+    },
+
+    async handleAllocRole () {
+      const { data } = await allocateUserRoles({
+        userId: (this.currentUser as any).id,
+        roleIdList: this.roleIdList
+      })
+      this.$message.success('操作成功')
+      this.dialogVisible = false
     }
   }
 })

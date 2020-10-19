@@ -40,3 +40,11 @@ export const getAllRoles = () => {
     url: '/boss/role/all'
   })
 }
+
+export const allocateUserRoles = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/role/allocateUserRoles',
+    data
+  })
+}
