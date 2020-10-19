@@ -80,6 +80,11 @@ const routes: Array<RouteConfig> = [
         name: 'alloc-resource',
         component: () => import(/* webpackChunkName: 'alloc-menu' */ '@/views/role/alloc-resource.vue'),
         props: true // 将路由路径参数映射到组件的 props 数据中
+      },
+      {
+        path: '/course/create',
+        name: 'course-create',
+        component: () => import(/* webpackChunkName: 'course-create' */ '@/views/course/create.vue')
       }
     ]
   },

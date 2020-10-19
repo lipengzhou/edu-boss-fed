@@ -37,7 +37,13 @@
     <el-card>
       <div slot="header">
         <span>查询结果：</span>
-        <el-button style="float: right; margin-top: -5px" type="primary">添加课程</el-button>
+        <el-button
+          style="float: right; margin-top: -5px"
+          type="primary"
+          @click="$router.push({
+            name: 'course-create'
+          })"
+        >添加课程</el-button>
       </div>
       <el-table
         :data="courses"
