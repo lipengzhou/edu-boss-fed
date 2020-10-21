@@ -5,6 +5,7 @@
       type="circle"
       :percentage="percentage"
       :width="178"
+      :status="percentage === 100 ? 'success' : undefined"
     />
     <el-upload
       v-else
@@ -59,8 +60,11 @@ export default Vue.extend({
       this.isUploading = true
       const fd = new FormData()
       fd.append('file', options.file)
-      const { data } = await uploadCourseImage(fd)
+      const { data } = await uploadCourseImage(fd, e => {
+        this.percentage = Math.floor(e.loaded / e.total * 100)
+      })
       this.isUploading = false
+      this.percentage = 0
       this.$emit('input', data.data.name)
     }
   }
