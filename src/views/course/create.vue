@@ -58,67 +58,71 @@
                 1. 它会给子组件传递一个名字叫 value 的数据（Props）
                 2. 默认监听 input 事件，修改绑定的数据（自定义事件）
              -->
-            <course-image v-model="course.courseListImg" />
-            <!-- <el-upload
-              class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false"
-              :before-upload="beforeAvatarUpload"
-              :http-request="handleUpload"
-            >
-              <img v-if="course.courseListImg" :src="course.courseListImg" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload> -->
+            <course-image
+              v-model="course.courseListImg"
+              :limit="5"
+            />
           </el-form-item>
           <el-form-item label="介绍封面">
-            <course-image :limit="5" v-model="course.courseImgUrl" />
+            <course-image
+              :limit="5"
+              v-model="course.courseImgUrl"
+            />
           </el-form-item>
         </div>
         <div v-show="activeStep === 2">
           <el-form-item label="售卖价格">
-            <el-input>
+            <el-input v-model.number="course.discounts" type="number">
               <template slot="append">元</template>
             </el-input>
           </el-form-item>
           <el-form-item label="商品原价">
-            <el-input>
+            <el-input v-model.number="course.price" type="number">
               <template slot="append">元</template>
             </el-input>
           </el-form-item>
           <el-form-item label="销量">
-            <el-input>
+            <el-input v-model.number="course.sales" type="number">
               <template slot="append">单</template>
             </el-input>
           </el-form-item>
           <el-form-item label="活动标签">
-            <el-input></el-input>
+            <el-input v-model="course.discountsTag"></el-input>
           </el-form-item>
         </div>
         <div v-show="activeStep === 3">
           <el-form-item label="限时秒杀开关">
             <el-switch
-              v-model="isSeckill"
+              v-model="course.activityCourse"
               active-color="#13ce66"
               inactive-color="#ff4949"
             >
             </el-switch>
           </el-form-item>
-          <template v-if="isSeckill">
+          <template v-if="course.activityCourse">
             <el-form-item label="开始时间">
-              <el-date-picker type="datetime" placeholder="选择日期时间">
-              </el-date-picker>
+              <el-date-picker
+                v-model="course.activityCourseDTO.beginTime"
+                type="date"
+                placeholder="选择日期时间"
+                value-format="yyyy-MM-dd"
+              />
             </el-form-item>
             <el-form-item label="结束时间">
-              <el-date-picker type="datetime" placeholder="选择日期时间">
-              </el-date-picker>
+              <el-date-picker
+                v-model="course.activityCourseDTO.endTime"
+                type="date"
+                placeholder="选择日期时间"
+                value-format="yyyy-MM-dd"
+              />
             </el-form-item>
             <el-form-item label="秒杀价">
-              <el-input>
+              <el-input v-model.number="course.activityCourseDTO.amount" type="number">
                 <template slot="append">元</template>
               </el-input>
             </el-form-item>
             <el-form-item label="秒杀库存">
-              <el-input>
+              <el-input v-model.number="course.activityCourseDTO.stock" type="number">
                 <template slot="append">个</template>
               </el-input>
             </el-form-item>
@@ -126,10 +130,22 @@
         </div>
         <div v-show="activeStep === 4">
           <el-form-item label="课程详情">
-            <el-input type="textarea"></el-input>
+            <el-input v-model="course.courseDescriptionMarkDown" type="textarea"></el-input>
+          </el-form-item>
+          <el-form-item label="是否发布">
+            <el-switch
+              v-model="course.status"
+              :active-value="1"
+              :inactive-value="0"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">保存</el-button>
+            <el-button
+              type="primary"
+              @click="handleSave"
+            >保存</el-button>
           </el-form-item>
         </div>
         <el-form-item v-if="activeStep >= 0 && activeStep < 4">
@@ -161,14 +177,13 @@ export default Vue.extend({
         { title: '课程详情', icon: 'el-icon-edit' }
       ],
       imageUrl: '', // 预览图片地址
-      isSeckill: false, // 是否开启秒杀
       course: {
-        id: 0,
+        // id: 0,
         courseName: '',
         brief: '',
         teacherDTO: {
-          id: 0,
-          courseId: 0,
+          // id: 0,
+          // courseId: 0,
           teacherName: '',
           teacherHeadPicUrl: '',
           position: '',
@@ -186,12 +201,12 @@ export default Vue.extend({
         sortNum: 0,
         previewFirstField: '',
         previewSecondField: '',
-        status: 0,
+        status: 0, // 0：未发布，1：已发布
         sales: 0,
-        activityCourse: true,
+        activityCourse: false, // 是否开启活动秒杀
         activityCourseDTO: {
-          id: 0,
-          courseId: 0,
+          // id: 0,
+          // courseId: 0,
           beginTime: '',
           endTime: '',
           amount: 0,
@@ -202,6 +217,10 @@ export default Vue.extend({
     }
   },
   methods: {
+    async handleSave () {
+      const { data } = await saveOrUpdateCourse(this.course)
+      this.$router.back()
+    }
   }
 })
 </script>
