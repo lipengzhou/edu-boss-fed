@@ -130,7 +130,8 @@
         </div>
         <div v-show="activeStep === 4">
           <el-form-item label="课程详情">
-            <el-input v-model="course.courseDescriptionMarkDown" type="textarea"></el-input>
+            <text-editor v-model="course.courseDescriptionMarkDown" />
+            <!-- <el-input v-model="course.courseDescriptionMarkDown" type="textarea"></el-input> -->
           </el-form-item>
           <el-form-item label="是否发布">
             <el-switch
@@ -160,11 +161,13 @@
 import Vue from 'vue'
 import { saveOrUpdateCourse } from '@/services/course'
 import CourseImage from './components/CourseImage.vue'
+import TextEditor from '@/components/TextEditor/index.vue'
 
 export default Vue.extend({
   name: 'CourseCreate',
   components: {
-    CourseImage
+    CourseImage,
+    TextEditor
   },
   data () {
     return {
@@ -176,7 +179,6 @@ export default Vue.extend({
         { title: '秒杀活动', icon: 'el-icon-edit' },
         { title: '课程详情', icon: 'el-icon-edit' }
       ],
-      imageUrl: '', // 预览图片地址
       course: {
         // id: 0,
         courseName: '',
@@ -219,7 +221,12 @@ export default Vue.extend({
   methods: {
     async handleSave () {
       const { data } = await saveOrUpdateCourse(this.course)
-      this.$router.back()
+      if (data.code === '000000') {
+        this.$message.success('保存成功')
+        this.$router.push('/course')
+      } else {
+        this.$message.error('保存失败')
+      }
     }
   }
 })

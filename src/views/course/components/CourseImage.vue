@@ -57,15 +57,25 @@ export default Vue.extend({
     },
 
     async handleUpload (options: any) {
-      this.isUploading = true
-      const fd = new FormData()
-      fd.append('file', options.file)
-      const { data } = await uploadCourseImage(fd, e => {
-        this.percentage = Math.floor(e.loaded / e.total * 100)
-      })
+      try {
+        this.isUploading = true
+        const fd = new FormData()
+        fd.append('file', options.file)
+        const { data } = await uploadCourseImage(fd, e => {
+          this.percentage = Math.floor(e.loaded / e.total * 100)
+        })
+        if (data.code === '000000') {
+          this.isUploading = false
+          this.percentage = 0
+          this.$emit('input', data.data.name)
+        } else {
+          this.$message.error('上传失败')
+        }
+      } catch (err) {
+        console.log(err)
+      }
       this.isUploading = false
       this.percentage = 0
-      this.$emit('input', data.data.name)
     }
   }
 })
