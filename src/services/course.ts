@@ -39,3 +39,13 @@ export const uploadCourseImage = (data: any, onUploadProgress: (progressEvent: P
     onUploadProgress
   })
 }
+
+export const getCourseById = (courseId: string | number) => {
+  return request({
+    method: 'GET',
+    url: '/boss/course/getCourseById',
+    params: {
+      courseId
+    }
+  })
+}
