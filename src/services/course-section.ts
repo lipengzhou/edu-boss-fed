@@ -13,3 +13,11 @@ export const getSectionAndLesson = (courseId: string | number) => {
     }
   })
 }
+
+export const saveOrUpdateSection = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/course/section/saveOrUpdateSection',
+    data
+  })
+}
