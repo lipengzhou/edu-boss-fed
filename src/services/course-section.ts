@@ -21,3 +21,13 @@ export const saveOrUpdateSection = (data: any) => {
     data
   })
 }
+
+export const getSectionById = (sectionId: string | number) => {
+  return request({
+    method: 'GET',
+    url: '/boss/course/section/getBySectionId',
+    params: {
+      sectionId
+    }
+  })
+}
