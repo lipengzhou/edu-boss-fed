@@ -175,7 +175,7 @@ export default Vue.extend({
 
     async onStateChange (course: any) {
       course.isStatusLoading = true
-      const { data } = await changeState({
+      await changeState({
         courseId: course.id,
         status: course.status
       })

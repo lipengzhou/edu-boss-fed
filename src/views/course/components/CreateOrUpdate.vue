@@ -238,8 +238,10 @@ export default Vue.extend({
     async loadCourse () {
       const { data } = await getCourseById(this.courseId)
       const { activityCourseDTO } = data.data
-      activityCourseDTO.beginTime = moment(activityCourseDTO.beginTime).format('YYYY-MM-DD')
-      activityCourseDTO.endTime = moment(activityCourseDTO.endTime).format('YYYY-MM-DD')
+      if (activityCourseDTO) {
+        activityCourseDTO.beginTime = moment(activityCourseDTO.beginTime).format('YYYY-MM-DD')
+        activityCourseDTO.endTime = moment(activityCourseDTO.endTime).format('YYYY-MM-DD')
+      }
       this.course = data.data
     },
 

@@ -225,7 +225,7 @@ export default Vue.extend({
     },
 
     async handleAddSection () {
-      const { data } = await saveOrUpdateSection(this.section)
+      await saveOrUpdateSection(this.section)
       this.loadSections()
       this.isAddSectionShow = false
       ;(this.$refs['section-form'] as Form).resetFields()
@@ -283,7 +283,7 @@ export default Vue.extend({
       return draggingNode.data.sectionId === dropNode.data.sectionId && type !== 'inner'
     },
 
-    async handleSort (dragNode: any, dropNode: any, type: any, event: any) {
+    async handleSort (dragNode: any, dropNode: any) {
       this.isLoading = true
       try {
         await Promise.all(dropNode.parent.childNodes.map((item: any, index: number) => {
