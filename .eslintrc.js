@@ -23,6 +23,7 @@ module.exports = {
         "delimiter": "none",
         "requireLast": true
       }
-    }]
+    }],
+    '@typescript-eslint/no-explicit-any': 'off'
   }
 }

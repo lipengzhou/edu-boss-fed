@@ -40,7 +40,19 @@
           <!-- lession -->
           <span v-else class="actions">
             <el-button @click="handleShowEditLesson(data, node.parent.data)">编辑</el-button>
-            <el-button type="success">上传视频</el-button>
+            <el-button
+              type="success"
+              @click="$router.push({
+                name: 'course-video',
+                params: {
+                  courseId
+                },
+                query: {
+                  sectionId: node.parent.id,
+                  lessonId: data.id,
+                }
+              })"
+            >上传视频</el-button>
             <el-select
               class="select-status"
               v-model="data.status"
