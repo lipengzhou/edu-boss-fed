@@ -29,12 +29,17 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import {
+  getAliyunImagUploadAddressAdnAuth,
+  getAliyunVideoUploadAddressAdnAuth
+} from '@/services/aliyun-upload'
 
 export default Vue.extend({
   name: 'CourseVideo',
   data () {
     return {
-      uploader: null
+      uploader: null,
+      imageURL: ''
     }
   },
   computed: {
@@ -64,11 +69,33 @@ export default Vue.extend({
         // 网络原因失败时，重新上传间隔时间，默认为2秒
         retryDuration: 2,
         // 开始上传
-        onUploadstarted: function (uploadInfo: any) {
+        onUploadstarted: async (uploadInfo: any) => {
           console.log('onUploadstarted', uploadInfo)
 
           // 1. 通过我们的后端获取文件上传凭证
+          let uploadAddressAndAuth
+          if (uploadInfo.isImage) {
+            // 获取图片上传凭证
+            const { data } = await getAliyunImagUploadAddressAdnAuth()
+            uploadAddressAndAuth = data.data
+            this.imageURL = data.data.imageURL
+          } else {
+            // 获取视频上传凭证
+            const { data } = await getAliyunVideoUploadAddressAdnAuth({
+              fileName: uploadInfo.file.name,
+              imageUrl: this.imageURL // 请确保一定是先上传图片
+            })
+            uploadAddressAndAuth = data.data
+          }
+
           // 2. 调用 uploader.setUploadAuthAndAddress 设置上传凭证
+          ;(this.uploader as any).setUploadAuthAndAddress(
+            uploadInfo,
+            uploadAddressAndAuth.uploadAuth,
+            uploadAddressAndAuth.uploadAddress,
+            uploadAddressAndAuth.imageId || uploadAddressAndAuth.videoId
+          )
+
           // 3. 设置好上传凭证确认没有问题，上传进度开始
 
           // setUploadAuthAndAddress(uploadFileInfo, uploadAuth, uploadAddress,videoId);
