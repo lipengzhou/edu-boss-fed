@@ -22,6 +22,12 @@
           >开始上传</el-button>
           <el-button @click="$router.back()">返回</el-button>
         </el-form-item>
+        <el-form-item>
+          <p>视频上传中：{{ uploadPercent }}%</p>
+          <p
+            v-if="isUploadSucess"
+          >视频转码中：{{ isTransCodeSuccess ? '完成' : '正在处理，请稍后' }}</p>
+        </el-form-item>
       </el-form>
     </el-card>
   </div>
@@ -31,7 +37,9 @@
 import Vue from 'vue'
 import {
   getAliyunImagUploadAddressAdnAuth,
-  getAliyunVideoUploadAddressAdnAuth
+  getAliyunVideoUploadAddressAdnAuth,
+  aliyunTransCode,
+  getAliyunTransCodePercent
 } from '@/services/aliyun-upload'
 
 export default Vue.extend({
@@ -39,7 +47,11 @@ export default Vue.extend({
   data () {
     return {
       uploader: null,
-      imageURL: ''
+      imageURL: '',
+      videoId: null,
+      uploadPercent: 0,
+      isUploadSucess: false,
+      isTransCodeSuccess: false
     }
   },
   computed: {
@@ -86,6 +98,7 @@ export default Vue.extend({
               imageUrl: this.imageURL // 请确保一定是先上传图片
             })
             uploadAddressAndAuth = data.data
+            this.videoId = uploadAddressAndAuth.videoId
           }
 
           // 2. 调用 uploader.setUploadAuthAndAddress 设置上传凭证
@@ -109,21 +122,50 @@ export default Vue.extend({
           console.log('onUploadFailed', uploadInfo, code, message)
         },
         // 文件上传进度，单位：字节
-        onUploadProgress: function (uploadInfo: any, totalSize: any, loadedPercent: any) {
+        onUploadProgress: (uploadInfo: any, totalSize: any, loadedPercent: any) => {
           console.log('onUploadProgress', uploadInfo, totalSize, loadedPercent)
+          console.log('loadedPercent', loadedPercent)
+          if (!uploadInfo.isImage) {
+            this.uploadPercent = Math.floor(loadedPercent * 100)
+          }
         },
         // 上传凭证超时
         onUploadTokenExpired: function (uploadInfo: any) {
           console.log('onUploadTokenExpired', 'uploadInfo')
         },
         // 全部文件上传结束
-        onUploadEnd: function (uploadInfo: any) {
-          console.log('onUploadEnd', uploadInfo)
+        onUploadEnd: async (uploadInfo: any) => {
+          this.isUploadSucess = true
+          // 请求转码
+          const { data } = await aliyunTransCode({
+            lessonId: this.$route.query.lessonId,
+            coverImageUrl: this.imageURL,
+            fileName: (this.video as any).files[0].name,
+            fileId: this.videoId
+          })
+
+          console.log(data)
+
+          // 轮询查询转码进度
+          const timer = setInterval(async () => {
+            const { data } = await getAliyunTransCodePercent(this.$route.query.lessonId)
+            console.log(data.data)
+            if (data.data === 100) {
+              this.isTransCodeSuccess = true
+              window.clearInterval(timer)
+              console.log('转码成功')
+            }
+          }, 3000)
         }
       })
     },
 
     handleUpload () {
+      // 初始化上传状态
+      this.isUploadSucess = false
+      this.isTransCodeSuccess = false
+      this.uploadPercent = 0
+
       // 获取上传的文件
       const videoFile = (this.video as any).files[0]
       const imageFile = (this.image as any).files[0]
