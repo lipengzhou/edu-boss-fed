@@ -10,7 +10,7 @@
       router
       collapse
     >
-      <!-- <el-submenu index="1">
+      <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-location"></i>
           <span>权限管理</span>
@@ -49,9 +49,8 @@
           <i class="el-icon-setting"></i>
           <span slot="title">广告位列表</span>
         </el-menu-item>
-      </el-submenu> -->
-
-      <template v-for="(menu, index) in menuList">
+      </el-submenu>
+      <!-- <template v-for="(menu, index) in menuList">
         <el-submenu
           v-if="menu.subMenuList && menu.shown && menu.subMenuList.some(item => item.shown)"
           :key="menu.id"
@@ -78,7 +77,7 @@
             <span slot="title">{{ menu.name }}</span>
           </el-menu-item>
         </template>
-      </template>
+      </template> -->
     </el-menu>
   </div>
 </template>
