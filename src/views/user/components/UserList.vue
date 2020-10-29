@@ -192,7 +192,7 @@ export default Vue.extend({
     },
 
     async handleAllocRole () {
-      const { data } = await allocateUserRoles({
+      await allocateUserRoles({
         userId: (this.currentUser as any).id,
         roleIdList: this.roleIdList
       })

@@ -8,12 +8,13 @@ module.exports = {
       // `scss` 语法会要求语句结尾必须有分号，`sass` 则要求必须没有分号
       // 在这种情况下，我们可以使用 `scss` 选项，对 `scss` 语法进行单独配置
       scss: {
-        prependData: `@import "~@/styles/variables.scss";`
+        prependData: '@import "~@/styles/variables.scss";'
       }
     }
   },
 
   devServer: {
+    // 次代理仅针对本地开发服务（npm run serve）
     proxy: {
       '/boss': {
         target: 'http://eduboss.lagou.com',
