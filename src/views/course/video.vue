@@ -130,11 +130,11 @@ export default Vue.extend({
           }
         },
         // 上传凭证超时
-        onUploadTokenExpired: function (uploadInfo: any) {
-          console.log('onUploadTokenExpired', 'uploadInfo')
-        },
+        // onUploadTokenExpired: function (uploadInfo: any) {
+        //   console.log('onUploadTokenExpired', 'uploadInfo')
+        // },
         // 全部文件上传结束
-        onUploadEnd: async (uploadInfo: any) => {
+        onUploadEnd: async () => {
           this.isUploadSucess = true
           // 请求转码
           const { data } = await aliyunTransCode({
