@@ -7,6 +7,7 @@ import qs from 'qs'
 const request = axios.create({
   // 配置选项
   // timeout
+  baseURL: '/api'
 })
 
 function redirectLogin () {
