@@ -13,8 +13,14 @@ module.exports = {
     }
   },
 
+  configureWebpack: {
+    externals: {
+      'element-ui': 'ELEMENT'
+    }
+  },
+
   devServer: {
-    // 次代理仅针对本地开发服务（npm run serve）
+    // 此代理仅针对本地开发服务（npm run serve）
     proxy: {
       '/api/boss': {
         target: 'http://eduboss.lagou.com',
