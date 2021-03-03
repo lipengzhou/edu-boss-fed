@@ -45,7 +45,7 @@ request.interceptors.request.use(function (config) {
 
 // 响应拦截器
 let isRfreshing = false // 控制刷新 token 的状态
-let requests: any[] = [] // 存储刷新 token 期间过来的 401 请求
+let requests: Array<() => void> = [] // 存储刷新 token 期间过来的 401 请求
 request.interceptors.response.use(function (response) { // 状态码为 2xx 都会进入这里
   // console.log('请求响应成功了 => ', response)
   // 如果是自定义错误状态码，错误处理就写到这里

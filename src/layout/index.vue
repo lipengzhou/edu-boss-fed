@@ -38,7 +38,7 @@ export default Vue.extend({
   position: sticky;
   top: 0;
   max-height: 100vh;
-  background: #d3dce6;
+  background: #545c64;
 }
 
 .el-header {

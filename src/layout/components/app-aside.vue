@@ -1,6 +1,11 @@
 <template>
   <div class="aside">
+    <router-link class="logo" to="/" title="Back to Home">
+      <img src="./logo.png" alt="LagouEdu">
+      <h1>Edu Boss</h1>
+    </router-link>
     <el-menu
+      class="el-menu"
       default-active="4"
       @open="handleOpen"
       @close="handleClose"
@@ -8,7 +13,7 @@
       text-color="#fff"
       active-text-color="#ffd04b"
       router
-      collapse
+      :collapse="false"
     >
       <el-submenu index="1">
         <template slot="title">
@@ -105,11 +110,21 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .aside {
-  height: 100%;
+  .logo {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background: #545c64;
+    color: #fff;
+    text-decoration: none;
+    img {
+      width: 40px;
+    }
+  }
   .el-menu {
-    width: auto;
-    // min-height: 100vh;
-    height: 100%;
+    &:not(.el-menu--collapse) {
+      width: 200px;
+    }
   }
 }
 </style>

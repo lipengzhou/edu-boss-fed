@@ -32,10 +32,10 @@ export default new Vuex.Store({
   },
   actions: {
     async getUserPermissons ({ commit }) {
-      const { data } = await getUserPermissions()
-      commit('SET_MENU_LIST', data.content.menuList)
-      commit('SET_RESOURCE_LIST', data.content.resourceList)
-      return data
+      // const { data } = await getUserPermissions()
+      // commit('SET_MENU_LIST', data.content.menuList)
+      // commit('SET_RESOURCE_LIST', data.content.resourceList)
+      // return data
     }
   },
   modules: {
