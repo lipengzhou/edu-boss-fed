@@ -16,6 +16,7 @@
       :model="form"
       :rules="rules"
       label-width="80px"
+      size="medium"
     >
       <h2 class="form-title">系统登录</h2>
       <el-form-item label="手机号" prop="phone">
