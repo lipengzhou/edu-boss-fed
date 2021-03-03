@@ -43,31 +43,25 @@
       >
         <el-table-column
           type="index"
-          label="编号"
-          width="100">
+          label="编号">
         </el-table-column>
         <el-table-column
           prop="name"
-          label="资源名称"
-          width="180">
+          label="资源名称">
         </el-table-column>
         <el-table-column
           prop="url"
-          width="180"
           label="资源路径">
         </el-table-column>
         <el-table-column
           prop="description"
-          width="180"
           label="描述">
         </el-table-column>
         <el-table-column
-          width="180"
           prop="createdTime"
           label="添加时间">
         </el-table-column>
         <el-table-column
-          width="180"
           label="操作">
           <template slot-scope="scope">
             <el-button

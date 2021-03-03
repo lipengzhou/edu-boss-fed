@@ -52,13 +52,11 @@
       >
         <el-table-column
           prop="id"
-          label="ID"
-          width="50">
+          label="ID">
         </el-table-column>
         <el-table-column
           prop="courseName"
-          label="课程名称"
-          width="120">
+          label="课程名称">
         </el-table-column>
         <el-table-column
           prop="price"
@@ -86,7 +84,6 @@
         <el-table-column
           prop="price"
           label="操作"
-          width="180"
           align="center"
         >
           <template slot-scope="scope">

@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div slot="header">
-      <el-form :model="filterParams" ref="filter-form">
+      <el-form :model="filterParams" ref="filter-form" label-width="70px">
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="filterParams.phone"></el-input>
         </el-form-item>
@@ -35,31 +35,26 @@
     >
       <el-table-column
         prop="id"
-        label="用户ID"
-        width="100">
+        label="用户ID">
       </el-table-column>
       <el-table-column
         prop="name"
-        label="头像"
-        width="80">
+        label="头像">
         <template slot-scope="scope">
           <img width="30px" :src="scope.row.portrait || 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'">
         </template>
       </el-table-column>
       <el-table-column
         prop="name"
-        label="用户名"
-        width="120">
+        label="用户名">
       </el-table-column>
       <el-table-column
         prop="phone"
-        label="手机号"
-        width="120">
+        label="手机号">
       </el-table-column>
       <el-table-column
         prop="createTime"
-        label="注册时间"
-        width="120">
+        label="注册时间">
       </el-table-column>
       <!-- <el-table-column
         prop="name"
