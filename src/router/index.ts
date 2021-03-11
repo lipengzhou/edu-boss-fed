@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
 import store from '@/store'
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 Vue.use(VueRouter)
 
@@ -118,6 +120,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  nprogress.start()
   // to.matched 是一个数组（匹配到是路由记录）
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.state.user) {
@@ -139,6 +142,10 @@ router.beforeEach(async (to, from, next) => {
   console.log(data)
 
   next()
+})
+
+router.afterEach(() => {
+  nprogress.done()
 })
 
 // 全局前置守卫：任何页面的访问都要经过这里
