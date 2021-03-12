@@ -5,8 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.14.1/lib/theme-chalk/index.css">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.css) { %>
+      <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.cdn.css[i] %>">
+    <% } %>
   </head>
   <body>
     <noscript>
@@ -16,9 +18,8 @@
     <script src="/aliyun-upload-sdk/lib/es6-promise.min.js"></script>
     <script src="/aliyun-upload-sdk/lib/aliyun-oss-sdk-5.3.1.min.js"></script>
     <script src="/aliyun-upload-sdk/aliyun-upload-sdk-1.5.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.14.1/lib/index.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
-    <!-- built files will be auto injected -->
+    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+      <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+    <% } %>
   </body>
 </html>
