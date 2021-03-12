@@ -4,7 +4,8 @@
       <img src="./logo.png" alt="LagouEdu">
       <h1>Edu Boss</h1>
     </router-link>
-    <el-menu
+    <MenuList/>
+    <!-- <el-menu
       class="el-menu"
       default-active="4"
       @open="handleOpen"
@@ -14,8 +15,10 @@
       active-text-color="#ffd04b"
       router
       :collapse="false"
-    >
-      <el-submenu index="1">
+    > -->
+      <!-- 如果没有孩子，则渲染 submenu，否则渲染 menu-item -->
+
+      <!-- <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-lock"></i>
           <span>权限管理</span>
@@ -54,7 +57,7 @@
           <i class="el-icon-setting"></i>
           <span slot="title">广告位列表</span>
         </el-menu-item>
-      </el-submenu>
+      </el-submenu> -->
       <!-- <template v-for="(menu, index) in menuList">
         <el-submenu
           v-if="menu.subMenuList && menu.shown && menu.subMenuList.some(item => item.shown)"
@@ -83,18 +86,18 @@
           </el-menu-item>
         </template>
       </template> -->
-    </el-menu>
+    <!-- </el-menu> -->
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import MenuList from '@/components/MenuList/index.vue'
 
 export default Vue.extend({
   name: 'AppAside',
-  computed: {
-    ...mapState(['menuList'])
+  components: {
+    MenuList
   },
   methods: {
     handleOpen (key: string, keyPath: string): void {

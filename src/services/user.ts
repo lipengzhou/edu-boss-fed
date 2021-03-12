@@ -23,11 +23,15 @@ export const login = (data: User) => {
   })
 }
 
+// export interface UserInfo {
+//   isUpdatedPassword: boolean
+//   portrait: string
+//   userName: string
+//   weixinNickName: string
+// }
+
 export const getUserInfo = () => {
-  return request({
-    method: 'GET',
-    url: '/front/user/getInfo'
-  })
+  return request.get('/front/user/getInfo')
 }
 
 export const getUserPages = (data: any) => {

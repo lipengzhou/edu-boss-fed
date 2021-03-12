@@ -15,7 +15,7 @@ const routes: RouteConfig = {
       component: () =>
         import(/* webpackChunkName: 'user' */ '@/views/user/index.vue'),
       meta: {
-        // title: '用户管理'
+        role: 'Users'
       }
     }
   ]

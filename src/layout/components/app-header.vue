@@ -25,6 +25,7 @@
 import Vue from 'vue'
 import { getUserInfo } from '@/services/user'
 import Breadcrumb from '@/components/Breadcrumb/index.vue'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'AppHeader',
@@ -33,11 +34,14 @@ export default Vue.extend({
   },
   data () {
     return {
-      userInfo: {} // 当前登录用户信息
+      // userInfo: {} // 当前登录用户信息
     }
   },
+  computed: {
+    ...mapState(['userInfo'])
+  },
   created () {
-    this.loadUserInfo()
+    // this.loadUserInfo()
   },
   methods: {
     async loadUserInfo () {

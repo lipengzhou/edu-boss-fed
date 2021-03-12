@@ -2,7 +2,7 @@ import { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
 
 const routes: RouteConfig = {
-  path: '/course',
+  path: '/',
   component: Layout,
   meta: {
     title: '课程管理',
@@ -10,32 +10,51 @@ const routes: RouteConfig = {
   },
   children: [
     {
-      path: '',
+      path: '/course',
       name: 'course',
-      component: () => import(/* webpackChunkName: 'course' */ '@/views/course/index.vue')
+      component: () => import(/* webpackChunkName: 'course' */ '@/views/course/index.vue'),
+      meta: {
+        role: 'Courses'
+      }
     },
     {
-      path: 'create',
+      path: '/course/create',
       name: 'course-create',
-      component: () => import(/* webpackChunkName: 'course-create' */ '@/views/course/create.vue')
+      component: () => import(/* webpackChunkName: 'course-create' */ '@/views/course/create.vue'),
+      meta: {
+        title: '创建课程',
+        role: 'CourseCreate'
+      }
     },
     {
-      path: ':courseId/edit',
+      path: '/course/:courseId/edit',
       name: 'course-edit',
       component: () => import(/* webpackChunkName: 'course-edit' */ '@/views/course/edit.vue'),
-      props: true
+      props: true,
+      meta: {
+        title: '编辑课程',
+        role: 'CourseUpdate'
+      }
     },
     {
-      path: ':courseId/section',
+      path: '/course/:courseId/section',
       name: 'course-section',
       component: () => import(/* webpackChunkName: 'course-section' */ '@/views/course/section.vue'),
-      props: true
+      props: true,
+      meta: {
+        title: '课时管理',
+        role: 'CourseSections'
+      }
     },
     {
-      path: ':courseId/video',
+      path: '/course/:courseId/video',
       name: 'course-video',
       component: () => import(/* webpackChunkName: 'course-video' */ '@/views/course/video.vue'),
-      props: true
+      props: true,
+      meta: {
+        title: '视频上传',
+        role: 'VideoOptions'
+      }
     }
   ]
 }
