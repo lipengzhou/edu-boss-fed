@@ -14,8 +14,7 @@ const routes: RouteConfig = {
       name: 'advert',
       component: () => import(/* webpackChunkName: 'advert' */ '@/views/advert/index.vue'),
       meta: {
-        title: '广告列表',
-        role: 'Advertise'
+        title: '广告列表'
       }
     },
     {
@@ -23,8 +22,7 @@ const routes: RouteConfig = {
       name: 'advert-space',
       component: () => import(/* webpackChunkName: 'advert-space' */ '@/views/advert-space/index.vue'),
       meta: {
-        title: '广告位列表',
-        role: 'AdvertiseSpace'
+        title: '广告位列表'
       }
     }
   ]

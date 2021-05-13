@@ -11,7 +11,7 @@
         :menu="subMenu"
       />
     </el-submenu>
-    <el-menu-item v-else :index="menu.path">
+    <el-menu-item v-else :index="menu.href || menu.path">
       <i class="el-icon-setting"></i>
       <span slot="title">{{ menu.name }}</span>
     </el-menu-item>
