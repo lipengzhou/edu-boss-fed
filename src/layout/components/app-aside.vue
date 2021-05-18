@@ -1,7 +1,7 @@
 <template>
   <div class="aside">
     <el-menu
-      default-active="4"
+      :default-active="defaultActive"
       @open="handleOpen"
       @close="handleClose"
       background-color="#545c64"
@@ -9,6 +9,10 @@
       active-text-color="#ffd04b"
       router
     >
+      <el-menu-item index="/">
+        <i class="el-icon-menu"></i>
+        <span slot="title">首页</span>
+      </el-menu-item>
       <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-location"></i>
@@ -58,6 +62,11 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'AppAside',
+  data () {
+    return {
+      defaultActive: '/'
+    }
+  },
   methods: {
     handleOpen (key: string, keyPath: string): void {
       console.log(key, keyPath)
