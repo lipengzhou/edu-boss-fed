@@ -2,7 +2,7 @@ import { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
 
 const routes: RouteConfig = {
-  path: '/',
+  path: '/advert',
   component: Layout,
   meta: {
     title: '广告管理',
@@ -11,11 +11,12 @@ const routes: RouteConfig = {
   },
   children: [
     {
-      path: '/advert',
+      path: '',
       name: 'advert',
       component: () => import(/* webpackChunkName: 'advert' */ '@/views/advert/index.vue'),
       meta: {
-        title: '广告列表'
+        title: '广告列表',
+        permission: 'Advertise'
       }
     },
     {
@@ -23,7 +24,8 @@ const routes: RouteConfig = {
       name: 'advert-space',
       component: () => import(/* webpackChunkName: 'advert-space' */ '@/views/advert-space/index.vue'),
       meta: {
-        title: '广告位列表'
+        title: '广告位列表',
+        permission: 'AdvertiseSpace'
       }
     }
   ]

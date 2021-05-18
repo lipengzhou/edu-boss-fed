@@ -10,9 +10,12 @@ const routes: RouteConfig = {
   },
   children: [
     {
-      path: '/course',
+      path: '',
       name: 'Courses',
-      component: () => import(/* webpackChunkName: 'course' */ '@/views/course/index.vue')
+      component: () => import(/* webpackChunkName: 'course' */ '@/views/course/index.vue'),
+      meta: {
+        permission: 'Courses'
+      }
     }
     // {
     //   path: '/course/create',
