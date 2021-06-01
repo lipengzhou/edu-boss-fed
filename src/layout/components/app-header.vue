@@ -38,6 +38,7 @@ export default Vue.extend({
     }
   },
   created () {
+    console.log(this.$route.matched)
     this.loadUserInfo()
   },
   methods: {

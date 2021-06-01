@@ -22,12 +22,18 @@ const routes: Array<RouteConfig> = [
       {
         path: '', // 默认子路由
         name: 'home',
-        component: () => import(/* webpackChunkName: 'home' */ '@/views/home/index.vue')
+        component: () => import(/* webpackChunkName: 'home' */ '@/views/home/index.vue'),
+        meta: {
+          title: '首页'
+        }
       },
       {
         path: '/role',
         name: 'role',
-        component: () => import(/* webpackChunkName: 'role' */ '@/views/role/index.vue')
+        component: () => import(/* webpackChunkName: 'role' */ '@/views/role/index.vue'),
+        meta: {
+          title: '角色管理'
+        }
       },
       {
         path: '/menu',
