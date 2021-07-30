@@ -31,21 +31,15 @@ const config = {
   },
 
   devServer: {
-    // 此代理仅针对本地开发服务（npm run serve）
+    // 这个代理仅针对 npm run serve 运行的开发服务有效
     proxy: {
-      '/api/boss': {
+      '/boss': {
         target: 'http://eduboss.lagou.com',
-        changeOrigin: true, // 把请求头中的 host 配置为 target
-        pathRewrite: {
-          '^/api/': ''
-        }
+        changeOrigin: true
       },
-      '/api/front': {
+      '/front': {
         target: 'http://edufront.lagou.com',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api/': ''
-        }
+        changeOrigin: true
       }
     }
   },
