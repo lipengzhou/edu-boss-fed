@@ -27,7 +27,10 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'AppHeader'
+  name: 'AppHeader',
+  created () {
+    console.log(this.$route)
+  }
 })
 </script>
 
